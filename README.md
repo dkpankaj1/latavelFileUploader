@@ -7,6 +7,7 @@ use App\Services\FileUploadService;
 public function store(Request $request, FileUploadService $uploadService)
 {
     $file = $request->file('image');
+    $uploadService->setPath('images/products');
     $relativePath = $uploadService->upload($file);
 
     // Save $relativePath to DB if needed
