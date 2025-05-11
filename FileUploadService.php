@@ -14,9 +14,19 @@ class FileUploadService
      */
     public function __construct(string $path = 'uploads')
     {
+        $this->setPath($path);
+    }
+
+    /**
+     * Dynamically set the upload path.
+     *
+     * @param string $path Relative to public/
+     * @return void
+     */
+    public function setPath(string $path): void
+    {
         $this->basePath = public_path($path);
 
-        // Ensure the directory exists
         if (!File::exists($this->basePath)) {
             File::makeDirectory($this->basePath, 0755, true);
         }
@@ -24,8 +34,12 @@ class FileUploadService
 
     /**
      * Upload a file to the set path.
+     *
+     * @param UploadedFile $file
+     * @param string|null $filename
+     * @return string
      */
-    public function upload(UploadedFile $file, string $filename = null): string
+    public function upload(UploadedFile $file, ?string $filename = null): string
     {
         $filename = $filename ?? uniqid() . '.' . $file->getClientOriginalExtension();
         $file->move($this->basePath, $filename);
